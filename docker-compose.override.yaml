@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  api:
+    ports:
+      - "8080:8080"
+      - "5678:5678"
+    volumes:
+      - ./:/app
+    env_file:
+      - ./.env
+    command: "python -m debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+  db:
+    env_file:
+      - ./.env
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+
+volumes:
+  dbdata:
+    name: dbdata
