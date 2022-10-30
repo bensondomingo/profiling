@@ -9,10 +9,13 @@ uvicorn = {extras = ["standard"], version = "*"}
 sqlmodel = "*"
 psycopg = {extras = ["binary"], version = "*"}
 alembic = "*"
+importlib-resources = "*"
+asyncpg = "*"
 
 [dev-packages]
 isort = "*"
 flake8 = "*"
+black = "*"
 
 [requires]
 python_version = "3.9"
