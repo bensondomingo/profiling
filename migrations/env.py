@@ -8,8 +8,8 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlmodel import SQLModel
 
+from app.core.models import Base
 from app.users.models import *  # noqa: F401,F403
 from app.core.db import DB_URI_ASYNC
 
@@ -27,7 +27,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
-target_metadata = SQLModel.metadata
+target_metadata = Base.metadata
 
 target_metadata.naming_convention = {
     'ix': 'ix_%(column_0_label)s',

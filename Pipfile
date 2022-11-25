@@ -6,11 +6,14 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
-sqlmodel = "*"
 psycopg = {extras = ["binary"], version = "*"}
 alembic = "*"
 importlib-resources = "*"
 asyncpg = "*"
+psycopg2 = "*"
+sqlalchemy = "==2.0.0b3"
+black = "*"
+greenlet = "*"
 
 [dev-packages]
 isort = "*"
@@ -18,4 +21,7 @@ flake8 = "*"
 black = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true

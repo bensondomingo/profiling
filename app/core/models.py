@@ -1,27 +1,56 @@
+from typing_extensions import Annotated
 from datetime import datetime
 from uuid import UUID, uuid4
 
 from sqlalchemy import text
-from sqlmodel import Field, SQLModel
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    MappedAsDataclass,
+    declared_attr,
+    mapped_column,
+)
 
-
-class Model(SQLModel):
-    id: UUID = Field(
-        default_factory=uuid4,
+uuid_pk = Annotated[
+    UUID,
+    mapped_column(
         primary_key=True,
-        index=True,
+        default=uuid4,
+        server_default=text('gen_random_uuid()'),
         nullable=False,
-    )
-    created_at: datetime = Field(
+    ),
+]
+created_ts = Annotated[
+    datetime,
+    mapped_column(
         default=datetime.utcnow,
         nullable=False,
-        sa_column_kwargs={"server_default": text("current_timestamp(0)")},
-    )
-    updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        server_default=text('current_timestamp(0)'),
+    ),
+]
+updated_ts = Annotated[
+    datetime,
+    mapped_column(
+        default=datetime.utcnow,
+        server_default=text('current_timestamp(0)'),
+        onupdate=text("current_timestamp(0)"),
         nullable=False,
-        sa_column_kwargs={
-            "server_default": text("current_timestamp(0)"),
-            "onupdate": text("current_timestamp(0)"),
-        },
-    )
+    ),
+]
+
+
+class Base(DeclarativeBase):
+    """
+    sqlalchemy base model
+    """
+
+
+class CommonFieldsMixin:
+
+    id: Mapped[uuid_pk]
+    created_at: Mapped[created_ts]
+    updated_at: Mapped[updated_ts]
+
+    @declared_attr.directive
+    def __tablename__(cls) -> str:
+        return cls.__name__.lower()

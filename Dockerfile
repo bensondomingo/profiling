@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 EXPOSE 8080
 
@@ -13,6 +13,8 @@ ENV PROJECT_DIR /app
 WORKDIR ${PROJECT_DIR}
 
 COPY Pipfile Pipfile.lock ${PROJECT_DIR}/
+
+RUN apt update && apt install python3-dev libpq-dev gcc -y
 
 RUN pip install pipenv && \
     pip install debugpy && \
