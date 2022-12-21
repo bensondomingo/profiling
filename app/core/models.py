@@ -6,11 +6,11 @@ from sqlalchemy import text
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
-    MappedAsDataclass,
     declared_attr,
     mapped_column,
 )
 
+int_pk = Annotated[int, mapped_column(primary_key=True, nullable=False)]
 uuid_pk = Annotated[
     UUID,
     mapped_column(
@@ -47,7 +47,7 @@ class Base(DeclarativeBase):
 
 class CommonFieldsMixin:
 
-    id: Mapped[uuid_pk]
+    id: Mapped[int_pk]
     created_at: Mapped[created_ts]
     updated_at: Mapped[updated_ts]
 
