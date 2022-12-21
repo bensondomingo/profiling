@@ -1,8 +1,8 @@
-"""Initial
+"""initial
 
-Revision ID: 1a67d955dc8a
+Revision ID: 074f6ffc05c1
 Revises: 
-Create Date: 2022-11-26 16:43:23.446885
+Create Date: 2022-12-21 18:22:50.767479
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1a67d955dc8a'
+revision = '074f6ffc05c1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,26 +22,29 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(length=50), nullable=False),
     sa.Column('last_name', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=50), nullable=True),
-    sa.Column('contact_number', sa.String(), nullable=True),
+    sa.Column('contact_number', sa.String(length=11), nullable=True),
     sa.Column('address', sa.String(), nullable=True),
     sa.Column('birth_date', sa.Date(), nullable=True),
-    sa.Column('marital_status', sa.Enum('SINGLE', 'MARRIED', 'SEPARATED', 'WIDOWED', name='maritalstatus'), nullable=True),
-    sa.Column('gender', sa.Enum('MALE', 'FEMALE', name='gender'), nullable=True),
-    sa.Column('id', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False),
+    sa.Column('marital_status', sa.String(), nullable=True),
+    sa.Column('gender', sa.String(), nullable=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('contact_number'),
+    sa.UniqueConstraint('email')
     )
     op.create_table('relation',
-    sa.Column('type', sa.Enum('MOTHER', 'FATHER', 'SPOUSE', 'SIBLING', name='relationtype'), nullable=False),
-    sa.Column('subject_id', sa.Uuid(), nullable=False),
-    sa.Column('relative_id', sa.Uuid(), nullable=False),
-    sa.Column('id', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False),
+    sa.Column('type', sa.String(length=10), nullable=False),
+    sa.Column('subject_id', sa.Integer(), nullable=False),
+    sa.Column('relative_id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
     sa.ForeignKeyConstraint(['relative_id'], ['profile.id'], ),
     sa.ForeignKeyConstraint(['subject_id'], ['profile.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('type', 'subject_id', 'relative_id')
     )
     # ### end Alembic commands ###
 
