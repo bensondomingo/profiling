@@ -19,7 +19,7 @@ from .schema import (
 router = APIRouter(prefix='/profiles', tags=['profiles'])
 
 
-@router.get(path='/', response_model=list[ProfileListSchema])
+@router.get(path='', response_model=list[ProfileListSchema])
 async def profiles(db: AsyncSession = Depends(get_db_session)):
     stmt = select(Profile)
     res = await db.execute(statement=stmt)
@@ -28,7 +28,7 @@ async def profiles(db: AsyncSession = Depends(get_db_session)):
     return profiles
 
 
-@router.post(path='/', response_model=ProfileListSchema)
+@router.post(path='', response_model=ProfileListSchema)
 async def create_profile(
     profile: ProfileCreateSchema,
     db: AsyncSession = Depends(get_db_session),
