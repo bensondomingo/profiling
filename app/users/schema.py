@@ -1,6 +1,7 @@
 import enum
 from datetime import date, datetime
 
+import arrow
 from pydantic import BaseModel, validator
 
 
@@ -65,6 +66,13 @@ class ProfileListSchema(ProfileBaseSchema):
 
 class ProfileCreateSchema(ProfileBaseSchema):
     """"""
+
+    @validator('birth_date', pre=True)
+    def deserialize_datetime(cls, v: str | None):
+        try:
+            return arrow.get(v).datetime
+        except Exception:
+            return v
 
 
 class RelationSchema(BaseModel):
