@@ -1,16 +1,16 @@
 """initial
 
-Revision ID: 074f6ffc05c1
+Revision ID: 69568d266116
 Revises: 
-Create Date: 2022-12-21 18:22:50.767479
+Create Date: 2023-01-09 02:52:49.918355
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '074f6ffc05c1'
+revision = '69568d266116'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,13 +23,13 @@ def upgrade() -> None:
     sa.Column('last_name', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=50), nullable=True),
     sa.Column('contact_number', sa.String(length=11), nullable=True),
-    sa.Column('address', sa.String(), nullable=True),
+    sa.Column('address', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('birth_date', sa.Date(), nullable=True),
     sa.Column('marital_status', sa.String(), nullable=True),
     sa.Column('gender', sa.String(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp'), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('contact_number'),
     sa.UniqueConstraint('email')
@@ -39,8 +39,8 @@ def upgrade() -> None:
     sa.Column('subject_id', sa.Integer(), nullable=False),
     sa.Column('relative_id', sa.Integer(), nullable=False),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp'), nullable=False),
     sa.ForeignKeyConstraint(['relative_id'], ['profile.id'], ),
     sa.ForeignKeyConstraint(['subject_id'], ['profile.id'], ),
     sa.PrimaryKeyConstraint('id'),

@@ -2,6 +2,7 @@ from datetime import date
 from typing import Optional
 
 from sqlalchemy import ForeignKey, String, UniqueConstraint
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..core.models import Base, CommonFieldsMixin
@@ -20,7 +21,7 @@ class Profile(CommonFieldsMixin, Base):
         default=None,
         unique=True,
     )
-    address: Mapped[Optional[str]] = mapped_column(default=None)
+    address: Mapped[Optional[str]] = mapped_column(JSONB, default=dict)
     birth_date: Mapped[Optional[date]] = mapped_column(default=None)
 
     marital_status: Mapped[Optional[str]] = mapped_column(default=None)

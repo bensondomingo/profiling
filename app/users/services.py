@@ -1,12 +1,12 @@
 from typing import Coroutine
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schema import ProfileCreateSchema, RelationType
 from .models import Profile, Relation
 
 
 async def list_profiles(db: AsyncSession) -> Coroutine[None, None, list[Profile]]:
-    stmt = select(Profile)
+    stmt = select(Profile).order_by(desc(Profile.created_at))
     res = await db.execute(statement=stmt)
     profiles = res.scalars().all()
     await db.commit()

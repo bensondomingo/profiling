@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,7 +6,6 @@ from app.core.utils import parse_integrity_error
 
 from ..dependencies import get_db_session
 from . import services as srv
-from .models import Profile
 from .schema import (
     ProfileCreateSchema,
     ProfileListSchema,
@@ -21,10 +19,7 @@ router = APIRouter(prefix='/profiles', tags=['profiles'])
 
 @router.get(path='', response_model=list[ProfileListSchema])
 async def profiles(db: AsyncSession = Depends(get_db_session)):
-    stmt = select(Profile)
-    res = await db.execute(statement=stmt)
-    profiles = res.scalars().all()
-    await db.commit()
+    profiles = await srv.list_profiles(db=db)
     return profiles
 
 
