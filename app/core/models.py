@@ -25,15 +25,15 @@ created_ts = Annotated[
     mapped_column(
         default=datetime.utcnow,
         nullable=False,
-        server_default=text('current_timestamp(0)'),
+        server_default=text('current_timestamp'),
     ),
 ]
 updated_ts = Annotated[
     datetime,
     mapped_column(
         default=datetime.utcnow,
-        server_default=text('current_timestamp(0)'),
-        onupdate=text("current_timestamp(0)"),
+        server_default=text('current_timestamp'),
+        onupdate=text("current_timestamp"),
         nullable=False,
     ),
 ]
