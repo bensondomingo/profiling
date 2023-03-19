@@ -11,6 +11,7 @@ from ..core.models import Base, CommonFieldsMixin
 class Profile(CommonFieldsMixin, Base):
     first_name: Mapped[str] = mapped_column(String(50))
     last_name: Mapped[str] = mapped_column(String(50))
+    suffix: Mapped[Optional[str]] = mapped_column(String(10), default=None)
     email: Mapped[Optional[str]] = mapped_column(
         String(50),
         default=None,

@@ -39,6 +39,7 @@ class AddressSchema(BaseModel):
 class ProfileBaseSchema(BaseModel):
     first_name: str
     last_name: str
+    suffix: str | None = None
     email: str | None = None
     contact_number: str | None = None
     address: AddressSchema | None = None
@@ -57,7 +58,9 @@ class ProfileListSchema(ProfileBaseSchema):
         """
         Convert json string to AddressShema type
         """
-        value = AddressSchema.parse_raw(v)
+        if v is None:
+            return
+        value = AddressSchema.parse_obj(v)
         return value
 
     class Config:
