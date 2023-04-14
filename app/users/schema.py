@@ -24,6 +24,10 @@ class RelationType(enum.Enum):
     SIBLING = 'sibling'
 
 
+class AttendanceType(str, enum.Enum):
+    SUNDAY_SERVICE = 'sunday_service'
+
+
 class AddressSchema(BaseModel):
     unit_number: str | None = None
     street: str | None = None

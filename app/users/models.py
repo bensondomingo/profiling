@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..core.models import Base, CommonFieldsMixin
+from .schema import AttendanceType
 
 
 class Profile(CommonFieldsMixin, Base):
@@ -37,6 +38,11 @@ class Profile(CommonFieldsMixin, Base):
         primaryjoin='Profile.id==Relation.relative_id',
     )
 
+    attendance_logs: Mapped[list['AttendanceLog']] = relationship(
+        back_populates="profile",
+        primaryjoin='Profile.id==AttendanceLog.profile_id',
+    )
+
 
 class Relation(CommonFieldsMixin, Base):
     type: Mapped[str] = mapped_column(String(10))
@@ -54,3 +60,15 @@ class Relation(CommonFieldsMixin, Base):
     )
 
     __table_args__ = (UniqueConstraint('type', 'subject_id', 'relative_id'),)
+
+
+class AttendanceLog(CommonFieldsMixin, Base):
+    log_date: Mapped[date] = mapped_column()
+    profile_id: Mapped[int] = mapped_column(ForeignKey('profile.id'))
+    profile: Mapped[Profile] = relationship(
+        back_populates='attendance_logs',
+        primaryjoin='AttendanceLog.profile_id==Profile.id',
+    )
+    event_type: Mapped[Optional[str]] = mapped_column(
+        String(50), default=AttendanceType.SUNDAY_SERVICE.value
+    )
