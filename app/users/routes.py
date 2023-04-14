@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.utils import parse_integrity_error
@@ -30,6 +30,24 @@ async def create_profile(
 ):
     try:
         profile = await srv.create_profile(profile=profile, db=db)
+    except IntegrityError as e:
+        errors = parse_integrity_error(err_msgs=e.args)
+        raise HTTPException(status_code=400, detail=[e.dict() for e in errors])
+    return profile
+
+
+@router.put(path='/{profile_id}', response_model=ProfileListSchema)
+async def update_profile(
+    profile_id: int,
+    profile: ProfileCreateSchema,
+    db: AsyncSession = Depends(get_db_session),
+):
+    try:
+        profile = await srv.update_profile(
+            profile_id=profile_id, profile=profile, db=db
+        )
+    except NoResultFound:
+        raise HTTPException(status_code=404)
     except IntegrityError as e:
         errors = parse_integrity_error(err_msgs=e.args)
         raise HTTPException(status_code=400, detail=[e.dict() for e in errors])
