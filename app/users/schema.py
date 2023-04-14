@@ -98,3 +98,15 @@ class RelationListSchema(RelationSchema):
 
 class RelationCreateSchema(RelationSchema):
     """"""
+
+
+class AttendanceLogBaseSchema(BaseModel):
+    log_date: date
+    profile_id: int
+    event_type: str | None = AttendanceType.SUNDAY_SERVICE.value
+
+
+class AttendanceLogReadSchema(AttendanceLogBaseSchema):
+    id: int
+    created_at: datetime
+    updated_at: datetime

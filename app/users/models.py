@@ -64,11 +64,12 @@ class Relation(CommonFieldsMixin, Base):
 
 class AttendanceLog(CommonFieldsMixin, Base):
     log_date: Mapped[date] = mapped_column()
+    event_type: Mapped[Optional[str]] = mapped_column(
+        String(50), default=AttendanceType.SUNDAY_SERVICE.value
+    )
+
     profile_id: Mapped[int] = mapped_column(ForeignKey('profile.id'))
     profile: Mapped[Profile] = relationship(
         back_populates='attendance_logs',
         primaryjoin='AttendanceLog.profile_id==Profile.id',
-    )
-    event_type: Mapped[Optional[str]] = mapped_column(
-        String(50), default=AttendanceType.SUNDAY_SERVICE.value
     )
