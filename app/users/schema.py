@@ -30,7 +30,7 @@ class AddressSchema(BaseModel):
     purok: str | None = None
     brgy: str | None = None
     municipality: str | None = None
-    provice: str | None = None
+    province: str | None = None
 
     class Config:
         orm_mode = True
